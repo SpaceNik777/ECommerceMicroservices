@@ -137,7 +137,7 @@ env:
   - name: ConnectionStrings__DefaultConnection
     valueFrom:
       secretKeyRef:
-        name: app-secrets
+        name: order-service-secrets
         key: ConnectionStrings__DefaultConnection
   - name: ASPNETCORE_URLS
     value: "http://+:8080"
