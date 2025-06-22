@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "kafka.fullname" . }}
+  name: {{ include "zookeeper.fullname" . }}
   labels:
-    {{- include "kafka.labels" . | nindent 4 }}
+    {{- include "zookeeper.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "kafka.selectorLabels" . | nindent 6 }}
+      {{- include "zookeeper.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "kafka.labels" . | nindent 8 }}
+        {{- include "zookeeper.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -27,7 +27,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "kafka.serviceAccountName" . }}
+      serviceAccountName: {{ include "zookeeper.serviceAccountName" . }}
       {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
@@ -42,10 +42,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: client
-              containerPort: 9092
-              protocol: TCP
-            - name: controller
-              containerPort: 9093
+              containerPort: 2181
               protocol: TCP
           {{- with .Values.env }}
           env:

@@ -7,9 +7,13 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - port: 9092
+      targetPort: client
       protocol: TCP
-      name: http
+      name: client
+    - port: 9093
+      targetPort: controller
+      protocol: TCP
+      name: controller
   selector:
     {{- include "kafka.selectorLabels" . | nindent 4 }}
