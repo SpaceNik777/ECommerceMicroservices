@@ -1,0 +1,11 @@
+D:\VSProjects\ECommerceMicroservices\OrderService.Contracts\bin\Debug\net8.0\OrderService.Contracts.deps.json
+D:\VSProjects\ECommerceMicroservices\OrderService.Contracts\bin\Debug\net8.0\OrderService.Contracts.dll
+D:\VSProjects\ECommerceMicroservices\OrderService.Contracts\bin\Debug\net8.0\OrderService.Contracts.pdb
+D:\VSProjects\ECommerceMicroservices\OrderService.Contracts\obj\Debug\net8.0\OrderService.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+D:\VSProjects\ECommerceMicroservices\OrderService.Contracts\obj\Debug\net8.0\OrderService.Contracts.AssemblyInfoInputs.cache
+D:\VSProjects\ECommerceMicroservices\OrderService.Contracts\obj\Debug\net8.0\OrderService.Contracts.AssemblyInfo.cs
+D:\VSProjects\ECommerceMicroservices\OrderService.Contracts\obj\Debug\net8.0\OrderService.Contracts.csproj.CoreCompileInputs.cache
+D:\VSProjects\ECommerceMicroservices\OrderService.Contracts\obj\Debug\net8.0\OrderService.Contracts.dll
+D:\VSProjects\ECommerceMicroservices\OrderService.Contracts\obj\Debug\net8.0\refint\OrderService.Contracts.dll
+D:\VSProjects\ECommerceMicroservices\OrderService.Contracts\obj\Debug\net8.0\OrderService.Contracts.pdb
+D:\VSProjects\ECommerceMicroservices\OrderService.Contracts\obj\Debug\net8.0\ref\OrderService.Contracts.dll

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание заказа</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .address-group {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .items-group {
+            margin-bottom: 20px;
+        }
+        .item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .remove-item {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .add-item {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .submit-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            display: none;
+        }
+        .alert-success {
+            background-color: #dff0d8;
+            color: #3c763d;
+            border: 1px solid #d6e9c6;
+        }
+        .alert-error {
+            background-color: #f2dede;
+            color: #a94442;
+            border: 1px solid #ebccd1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Создание нового заказа</h1>
+        
+        <div id="alert" class="alert"></div>
+
+        <form id="orderForm">
+            <div class="form-group">
+                <label for="userId">ID пользователя:</label>
+                <input type="text" id="userId" name="userId" required>
+            </div>
+
+            <div class="address-group">
+                <h3>Адрес доставки</h3>
+                <div class="form-group">
+                    <label for="street">Улица:</label>
+                    <input type="text" id="street" name="shippingAddress.street" required>
+                </div>
+                <div class="form-group">
+                    <label for="city">Город:</label>
+                    <input type="text" id="city" name="shippingAddress.city" required>
+                </div>
+                <div class="form-group">
+                    <label for="state">Область:</label>
+                    <input type="text" id="state" name="shippingAddress.state" required>
+                </div>
+                <div class="form-group">
+                    <label for="country">Страна:</label>
+                    <input type="text" id="country" name="shippingAddress.country" required>
+                </div>
+                <div class="form-group">
+                    <label for="zipCode">Почтовый индекс:</label>
+                    <input type="text" id="zipCode" name="shippingAddress.zipCode" required>
+                </div>
+            </div>
+
+            <div class="items-group">
+                <h3>Товары</h3>
+                <div id="items"></div>
+                <button type="button" class="add-item" onclick="addItem()">Добавить товар</button>
+            </div>
+
+            <button type="submit" class="submit-btn">Создать заказ</button>
+        </form>
+    </div>
+
+    <script>
+        // Тестовые данные для товаров
+        const products = [
+            { id: 1, name: "Смартфон", price: 29999 },
+            { id: 2, name: "Ноутбук", price: 49999 },
+            { id: 3, name: "Наушники", price: 4999 },
+            { id: 4, name: "Планшет", price: 19999 }
+        ];
+
+        let itemCounter = 0;
+
+        // Добавление нового товара
+        function addItem() {
+            const itemsDiv = document.getElementById('items');
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'item';
+            itemDiv.id = `item-${itemCounter}`;
+
+            const productOptions = products.map(p => 
+                `<option value="${p.id}">${p.name} - ${p.price} ₽</option>`
+            ).join('');
+
+            itemDiv.innerHTML = `
+                <div class="item-header">
+                    <h4>Товар #${itemCounter + 1}</h4>
+                    <button type="button" class="remove-item" onclick="removeItem(${itemCounter})">Удалить</button>
+                </div>
+                <div class="form-group">
+                    <label>Товар:</label>
+                    <select name="items[${itemCounter}].productId" required onchange="updatePrice(${itemCounter})">
+                        <option value="">Выберите товар</option>
+                        ${productOptions}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Количество:</label>
+                    <input type="number" name="items[${itemCounter}].quantity" min="1" value="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Цена за единицу:</label>
+                    <input type="number" name="items[${itemCounter}].unitPrice" readonly>
+                </div>
+            `;
+
+            itemsDiv.appendChild(itemDiv);
+            itemCounter++;
+        }
+
+        // Удаление товара
+        function removeItem(index) {
+            const item = document.getElementById(`item-${index}`);
+            item.remove();
+        }
+
+        // Обновление цены при выборе товара
+        function updatePrice(index) {
+            const select = document.querySelector(`select[name="items[${index}].productId"]`);
+            const priceInput = document.querySelector(`input[name="items[${index}].unitPrice"]`);
+            const selectedProduct = products.find(p => p.id === parseInt(select.value));
+            if (selectedProduct) {
+                priceInput.value = selectedProduct.price;
+            }
+        }
+
+        // Показать уведомление
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+
+        // Обработка отправки формы
+        document.getElementById('orderForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const orderData = {
+                userId: formData.get('userId'),
+                shippingAddress: {
+                    street: formData.get('shippingAddress.street'),
+                    city: formData.get('shippingAddress.city'),
+                    state: formData.get('shippingAddress.state'),
+                    country: formData.get('shippingAddress.country'),
+                    zipCode: formData.get('shippingAddress.zipCode')
+                },
+                items: []
+            };
+
+            // Сбор данных о товарах
+            const items = document.querySelectorAll('.item');
+            items.forEach((item, index) => {
+                orderData.items.push({
+                    productId: formData.get(`items[${index}].productId`),
+                    quantity: parseInt(formData.get(`items[${index}].quantity`)),
+                    unitPrice: parseFloat(formData.get(`items[${index}].unitPrice`))
+                });
+            });
+
+            try {
+                const response = await fetch('http://localhost:5000/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка при создании заказа');
+                }
+
+                showAlert('Заказ успешно создан!', 'success');
+                e.target.reset();
+                document.getElementById('items').innerHTML = '';
+                itemCounter = 0;
+            } catch (error) {
+                showAlert(error.message, 'error');
+            }
+        });
+
+        // Добавляем первый товар при загрузке страницы
+        addItem();
+    </script>
+</body>
+</html> 

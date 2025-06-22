@@ -1,0 +1,17 @@
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\obj\Debug\net8.0\OrderService.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\obj\Debug\net8.0\OrderService.Infrastructure.AssemblyInfoInputs.cache
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\obj\Debug\net8.0\OrderService.Infrastructure.AssemblyInfo.cs
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\obj\Debug\net8.0\OrderService.Infrastructure.csproj.CoreCompileInputs.cache
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\obj\Debug\net8.0\OrderService.Infrastructure.csproj.AssemblyReference.cache
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\bin\Debug\net8.0\OrderService.Infrastructure.deps.json
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\bin\Debug\net8.0\OrderService.Infrastructure.runtimeconfig.json
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\bin\Debug\net8.0\OrderService.Infrastructure.dll
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\bin\Debug\net8.0\OrderService.Infrastructure.pdb
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\bin\Debug\net8.0\OrderService.Domain.dll
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\bin\Debug\net8.0\OrderService.Domain.pdb
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\obj\Debug\net8.0\OrderService.Infrastructure.csproj.CopyComplete
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\obj\Debug\net8.0\OrderService.Infrastructure.dll
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\obj\Debug\net8.0\refint\OrderService.Infrastructure.dll
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\obj\Debug\net8.0\OrderService.Infrastructure.pdb
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\obj\Debug\net8.0\OrderService.Infrastructure.genruntimeconfig.cache
+D:\VSProjects\ECommerceMicroservices\OrderService.Infrastructure\obj\Debug\net8.0\ref\OrderService.Infrastructure.dll

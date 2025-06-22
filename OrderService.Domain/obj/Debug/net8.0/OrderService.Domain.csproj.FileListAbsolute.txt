@@ -1,0 +1,11 @@
+D:\VSProjects\ECommerceMicroservices\OrderService.Domain\obj\Debug\net8.0\OrderService.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\VSProjects\ECommerceMicroservices\OrderService.Domain\obj\Debug\net8.0\OrderService.Domain.AssemblyInfoInputs.cache
+D:\VSProjects\ECommerceMicroservices\OrderService.Domain\obj\Debug\net8.0\OrderService.Domain.AssemblyInfo.cs
+D:\VSProjects\ECommerceMicroservices\OrderService.Domain\obj\Debug\net8.0\OrderService.Domain.csproj.CoreCompileInputs.cache
+D:\VSProjects\ECommerceMicroservices\OrderService.Domain\bin\Debug\net8.0\OrderService.Domain.deps.json
+D:\VSProjects\ECommerceMicroservices\OrderService.Domain\bin\Debug\net8.0\OrderService.Domain.dll
+D:\VSProjects\ECommerceMicroservices\OrderService.Domain\bin\Debug\net8.0\OrderService.Domain.pdb
+D:\VSProjects\ECommerceMicroservices\OrderService.Domain\obj\Debug\net8.0\OrderService.Domain.dll
+D:\VSProjects\ECommerceMicroservices\OrderService.Domain\obj\Debug\net8.0\refint\OrderService.Domain.dll
+D:\VSProjects\ECommerceMicroservices\OrderService.Domain\obj\Debug\net8.0\OrderService.Domain.pdb
+D:\VSProjects\ECommerceMicroservices\OrderService.Domain\obj\Debug\net8.0\ref\OrderService.Domain.dll
