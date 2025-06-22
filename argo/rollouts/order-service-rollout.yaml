@@ -16,6 +16,7 @@ spec:
       containers:
         - name: order-service
           image: orderservice:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 8080
   strategy:
