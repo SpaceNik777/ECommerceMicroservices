@@ -129,9 +129,9 @@ affinity: {}
 
 envFrom:
   - configMapRef:
-      name: app-config
+      name: order-service-config
   - secretRef:
-      name: app-secrets
+      name: order-service-secrets
 
 env:
   - name: ConnectionStrings__DefaultConnection
