@@ -48,7 +48,6 @@ spec:
             - --udp-services-configmap=$(POD_NAMESPACE)/udp-services
             - --publish-service=$(POD_NAMESPACE)/{{ include "ingress.fullname" . }}
             - --annotations-prefix=nginx.ingress.kubernetes.io
-            - --enable-dynamic-configuration=false
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
