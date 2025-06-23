@@ -6,8 +6,8 @@ metadata:
     {{- include "ingress.labels" . | nindent 4 }}
 rules:
   - apiGroups: [""]
-    resources: ["configmaps", "endpoints", "nodes", "pods", "secrets", "services"]
-    verbs: ["get", "list", "watch"]
+    resources: ["configmaps", "endpoints", "nodes", "pods", "secrets", "services", "events"]
+    verbs: ["get", "list", "watch", "create"]
   - apiGroups: ["networking.k8s.io"]
     resources: ["ingresses"]
     verbs: ["get", "list", "watch"]

@@ -12,4 +12,5 @@ data:
   server-tokens: "false"
   enable-real-ip: "true"
   real-ip-header: "X-Forwarded-For"
-  real-ip-recursive: "true" 
+  real-ip-recursive: "true"
+  ssl-redirect: "false" 
