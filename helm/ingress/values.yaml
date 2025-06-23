@@ -57,6 +57,7 @@ service:
   port: 80
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
+# Disabled because we have a separate ecommerce-ingress.yaml
 ingress:
   enabled: false
   className: ""
