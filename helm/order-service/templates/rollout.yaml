@@ -20,6 +20,13 @@ spec:
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
+      annotations:
+        vault.security.banzaicloud.io/vault-addr: "http://vault:8200"
+        vault.security.banzaicloud.io/vault-role: "default"
+        vault.security.banzaicloud.io/vault-path: "kubernetes"
+        vault.security.banzaicloud.io/vault-env: "true"
+        vault.security.banzaicloud.io/vault-env-passthrough: "POSTGRES_USER,POSTGRES_PASSWORD,ConnectionStrings__DefaultConnection"
+        vault.security.banzaicloud.io/vault-secret: "secret/data/order-service"
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -42,10 +49,13 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          {{- with .Values.env }}
           env:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+            - name: POSTGRES_USER
+              value: ""
+            - name: POSTGRES_PASSWORD
+              value: ""
+            - name: ConnectionStrings__DefaultConnection
+              value: ""
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}

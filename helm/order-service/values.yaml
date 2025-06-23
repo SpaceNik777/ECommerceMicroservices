@@ -127,18 +127,7 @@ tolerations: []
 
 affinity: {}
 
-envFrom:
-  - configMapRef:
-      name: order-service-config
-  - secretRef:
-      name: order-service-secrets
-
 env:
-  - name: ConnectionStrings__DefaultConnection
-    valueFrom:
-      secretKeyRef:
-        name: order-service-secrets
-        key: ConnectionStrings__DefaultConnection
   - name: ASPNETCORE_URLS
     value: "http://+:8080"
   - name: ASPNETCORE_ENVIRONMENT

@@ -20,8 +20,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Configure PostgreSQL
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Connection string for PostgreSQL not found in environment variables. Ensure Vault mutating webhook injects it.");
+}
 builder.Services.AddDbContext<OrderService.Infrastructure.Persistence.OrderDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 // Configure Kafka
 builder.Services.AddSingleton<IEventPublisher>(sp =>
