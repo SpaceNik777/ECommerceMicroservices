@@ -177,26 +177,47 @@ OrderService/
 ## Технологии
 
 - **Backend:**
-  - .NET 8.0 (Core Domain)
-  - Go 1.21 (Вспомогательные сервисы)
+  - .NET 8.0 (Order Service)
+  - Go 1.21 (User Service, Inventory Service)
   - PostgreSQL 15
   - Kafka 7.3.0
+  - Zookeeper
+  - HashiCorp Vault (секреты и интеграция с Kubernetes)
+  - bank-vaults (mutating webhook для автоматической подстановки секретов)
   - Docker & Docker Compose
+  - Helm (чарты для всех сервисов и инфраструктуры)
+  - ArgoCD (GitOps-деплой)
+  - Argo Rollouts (canary-деплой и анализ метрик)
+  - NGINX Ingress Controller
 
 - **Frontend:**
   - HTML5
   - CSS3
   - JavaScript (Vanilla)
 
+- **DevOps/Инфраструктура:**
+  - Minikube (локальный кластер Kubernetes)
+  - kubectl
+  - PowerShell/bash (скрипты автоматизации)
+
 ## Запуск проекта
 
 ### Предварительные требования
 
 - .NET 8.0 SDK
-- Go 1.21
+- Go 1.21+
 - Docker & Docker Compose
+- Helm 3.x
+- Minikube (с поддержкой драйвера Docker)
+- kubectl
+- HashiCorp Vault (CLI и сервер)
+- bank-vaults (установлен в кластер как mutating webhook)
+- ArgoCD (установлен в кластер)
+- Argo Rollouts (установлен в кластер)
+- NGINX Ingress Controller
 - PostgreSQL 15
 - Kafka 7.3.0
+- Zookeeper
 
 ### Запуск через Docker Compose
 
