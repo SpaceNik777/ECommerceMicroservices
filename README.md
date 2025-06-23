@@ -753,6 +753,10 @@ curl -X POST http://localhost:30080/api/orders \
 - Если более 5% запросов завершаются ошибкой, rollout автоматически останавливается (см. параметры failureLimit, successCondition).
 - Canary-деплой можно контролировать через Argo Rollouts UI или CLI (`kubectl argo rollouts get rollout order-service -n ecommerce`).
 
+![image](https://github.com/user-attachments/assets/c4c41b26-0241-4514-8b28-f9cec7ae6248)
+![image](https://github.com/user-attachments/assets/b69a6d84-5b4d-4aec-9ffa-8b08e7390b20)
+
+
 ---
 
 **Все пункты ТЗ реализованы средствами ArgoCD, Helm, Vault, Argo Rollouts и Ingress. Все ключевые файлы и настройки находятся в папках `helm/` и `argo/applications/`. Проект готов для демонстрации и дальнейшего развития.**
