@@ -716,42 +716,7 @@ curl -X POST http://localhost:30080/api/orders \
   - Использование Service Accounts
   - Внедрение Pod Security Policies
 
-# Подробный отчет по реализации ТЗ средствами ArgoCD, Helm, Vault, Argo Rollouts и Ingress
-
-**1. Настроить локальный k8s кластер**
-- Для разработки использован Minikube. Все сервисы и инфраструктура развернуты в namespace `ecommerce`.
-- Все манифесты и Helm-чарты рассчитаны на работу в локальном кластере, поддерживается автоматизация через PowerShell-скрипт `deploy.ps1`.
-
-**2. Создать манифесты Kubernetes (Helm)**
-- Для каждого микросервиса (`order-service`, `user-service`, `inventory-service`) и инфраструктурных компонентов (Kafka, Zookeeper, Postgres, Vault, Ingress) созданы отдельные Helm-чарты в папке `helm/`.
-- Все параметры вынесены в `values.yaml` для удобства управления.
-- Для Ingress реализован Helm-чарт с NodePort (порт 30080), чтобы обеспечить доступ с хоста.
-
-**3. Деплой приложения осуществляется с помощью ArgoCD**
-- В папке `argo/applications/` созданы ArgoCD Application-манифесты для каждого сервиса и инфраструктурного компонента.
-- Включены приложения для Vault (`vault.yaml`), всех микросервисов, Kafka, Zookeeper, Postgres, Prometheus, Ingress.
-- ArgoCD автоматически синхронизирует состояние кластера с Git-репозиторием, поддерживает самовосстановление и удаление неактуальных ресурсов.
-- Все деплои и обновления происходят только через ArgoCD (UI или CLI).
-
-**4. Переменные окружения доставляются из HCL Vault с помощью mutating-webhook**
-- Vault разворачивается через Helm-чарт (`helm/vault`).
-- Для order-service (и других сервисов при необходимости) в Helm-чарте добавлены аннотации для интеграции с mutating-webhook bank-vaults:
-  ```yaml
-  vault.security.banzaicloud.io/vault-addr: "http://vault:8200"
-  vault.security.banzaicloud.io/vault-role: "default"
-  vault.security.banzaicloud.io/vault-skip-verify: "true"
-  vault.security.banzaicloud.io/vault-path: "kubernetes"
-  vault.security.banzaicloud.io/env: "DB_PASSWORD"
-  ```
-- Пример секрета (`DB_PASSWORD`) хранится в Vault (`helm/vault/templates/vault-secret.yaml`).
-- После деплоя через ArgoCD переменная окружения автоматически появляется в подах (можно проверить через `kubectl exec ... printenv`).
-
-**5. Реализован canary-деплой через Argo Rollouts с анализом метрик Ingress**
-- Для order-service создан rollout с canary-стратегией (`helm/order-service/templates/rollout.yaml`).
-- В rollout-ресурсе описана стратегия canary с шагами, весами и AnalysisTemplate.
-- AnalysisTemplate (`argo/rollouts/ingress-error-rate-template.yaml`) анализирует метрики ошибок (5xx) с помощью Prometheus, собираемых с Ingress-контроллера.
-- Если более 5% запросов завершаются ошибкой, rollout автоматически останавливается (см. параметры failureLimit, successCondition).
-- Canary-деплой можно контролировать через Argo Rollouts UI или CLI (`kubectl argo rollouts get rollout order-service -n ecommerce`).
+# Подробный отчет по реализации ТЗ средствами ArgoCD, Helm, Vault, Argo Rollouts и Ingress (актуальная реализация)
 
 ![image](https://github.com/user-attachments/assets/c4c41b26-0241-4514-8b28-f9cec7ae6248)
 ![image](https://github.com/user-attachments/assets/b69a6d84-5b4d-4aec-9ffa-8b08e7390b20)
@@ -759,7 +724,92 @@ curl -X POST http://localhost:30080/api/orders \
 
 ---
 
-**Все пункты ТЗ реализованы средствами ArgoCD, Helm, Vault, Argo Rollouts и Ingress. Все ключевые файлы и настройки находятся в папках `helm/` и `argo/applications/`. Проект готов для демонстрации и дальнейшего развития.**
+### 1. Настроить локальный k8s кластер
+
+- Для локального кластера используется **Minikube** (см. инструкции в README и скрипт deploy.ps1).
+- Все сервисы и инфраструктурные компоненты разворачиваются в namespace `ecommerce`.
+- Весь деплой и управление инфраструктурой происходит через ArgoCD и Helm-чарты.
+
+---
+
+### 2. Создать манифесты Kubernetes (Helm)
+
+- Для каждого сервиса и инфраструктурного компонента реализован отдельный Helm-чарт:
+  - `helm/order-service`, `helm/user-service`, `helm/inventory-service`, `helm/vault`, `helm/kafka`, `helm/zookeeper`, `helm/postgres`, `helm/prometheus`, `helm/ingress`.
+- В каждом чарте есть:
+  - `values.yaml` — параметры (ресурсы, переменные окружения, порты, probes и т.д.).
+  - В папке `templates/` — шаблоны: `deployment.yaml`, `service.yaml`, `ingress.yaml`, `hpa.yaml`, `serviceaccount.yaml` и др.
+  - Для order-service дополнительно: `rollout.yaml`, `analysis-template.yaml` (реализация canary-деплоя и анализа метрик).
+
+---
+
+### 3. Деплой приложения осуществляется с помощью argoCD, включая HCL Vault и ваше приложение
+
+- В папке `argo/applications/` для каждого сервиса и компонента есть **ArgoCD Application**:
+  - Например: `order-service.yaml`, `vault.yaml`, `user-service.yaml`, `inventory-service.yaml`, `kafka.yaml`, `zookeeper.yaml`, `postgres.yaml`, `prometheus.yaml`, `ingress.yaml`.
+- В каждом Application указывается путь к соответствующему Helm-чарту, namespace назначения и автоматическая синхронизация (`automated: {prune: true, selfHeal: true}`).
+- Пример (order-service.yaml):
+  ```yaml
+  apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    name: order-service
+    namespace: argocd
+  spec:
+    project: default
+    source:
+      repoURL: 'https://github.com/SpaceNik777/ECommerceMicroservices.git'
+      targetRevision: HEAD
+      path: helm/order-service
+      helm:
+        valueFiles:
+          - values.yaml
+    destination:
+      server: 'https://kubernetes.default.svc'
+      namespace: ecommerce
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+  ```
+- Аналогично для Vault (`vault.yaml`), где деплоится Helm-чарт из `helm/vault`.
+
+---
+
+### 4. Переменные окружения доставляются из HCL Vault с помощью mutating-webhook (bank-vaults)
+
+- В rollout и deployment order-service (и других сервисов) используются аннотации для bank-vaults:
+  ```yaml
+  vault.security.banzaicloud.io/vault-addr: "http://vault:8200"
+  vault.security.banzaicloud.io/vault-role: "default"
+  vault.security.banzaicloud.io/vault-path: "kubernetes"
+  vault.security.banzaicloud.io/vault-env: "true"
+  vault.security.banzaicloud.io/vault-env-passthrough: "POSTGRES_USER,POSTGRES_PASSWORD,ConnectionStrings__DefaultConnection"
+  vault.security.banzaicloud.io/vault-secret: "secret/data/order-service"
+  ```
+- В `helm/vault/templates/vault-secret.yaml` создаётся секрет с переменной `DB_PASSWORD`.
+- В `helm/vault/templates/deployment.yaml` Vault запускается в dev-режиме.
+- После деплоя через ArgoCD переменные окружения автоматически появляются в подах (через webhook bank-vaults).
+
+---
+
+### 5. С помощью Argo-rollouts реализовать механизм канареечного деплоя приложения на основе метрик от Ingress
+
+- В `helm/order-service/templates/rollout.yaml` описан rollout с canary-стратегией:
+  - Шаги: setWeight 20%, пауза, 50%, пауза, 100%.
+  - AnalysisTemplate: анализирует метрику error-rate (5xx) через Prometheus.
+- В `helm/order-service/templates/analysis-template.yaml`:
+  ```yaml
+  query: |
+    sum(rate(nginx_ingress_controller_requests{status=~"5.."}[30s]))
+    /
+    sum(rate(nginx_ingress_controller_requests[30s]))
+  ```
+  - Если более 5% запросов завершаются ошибкой (`failureLimit: 1`, `value: "0.05"`), rollout автоматически останавливается.
+
+---
+
+**Вся инфраструктура реализована только средствами, которые присутствуют в папках `argo/applications` и `helm`.**
 
 ## Vault: загрузка секрета и настройка доступа для order-service
 
