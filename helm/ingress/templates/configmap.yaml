@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-configuration
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ingress.labels" . | nindent 4 }}
+data:
+  use-proxy-protocol: "false"
+  proxy-real-ip-cidr: "0.0.0.0/0"
+  use-forwarded-headers: "true"
+  server-tokens: "false"
+  enable-real-ip: "true"
+  real-ip-header: "X-Forwarded-For"
+  real-ip-recursive: "true" 
