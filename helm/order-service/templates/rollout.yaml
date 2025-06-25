@@ -90,6 +90,8 @@ spec:
       {{- end }}
   strategy:
     canary:
+      canaryService: {{ include "order-service.fullname" . }}-canary
+      stableService: {{ include "order-service.fullname" . }}-stable
       steps:
         - setWeight: 20
         - pause: {duration: 2m}
